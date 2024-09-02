@@ -1,0 +1,48 @@
+# version: '3.7'
+
+# services:
+#   db:
+#     image: nouchka/sqlite3:latest
+#     volumes:
+#       - db_data:/db
+#   web:
+#     build: .
+#     command: gunicorn bank_account_kata.wsgi:application --bind 0.0.0.0:8000
+#     volumes:
+#       - .:/app
+#     ports:
+#       - "8000:8000"
+#     environment:
+#       - DJANGO_SETTINGS_MODULE=bank_account_kata.settings
+#     depends_on:
+#       - db
+#       - redis
+
+
+
+
+version: '3'
+
+services:
+  db:
+    image: nouchka/sqlite3:latest
+    volumes:
+      - db_data:/db
+  web:
+    build: .
+    command: daphne -b 0.0.0.0 -p 8000 chat_project.asgi:application
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=chat_project.settings 
+    depends_on:
+      - redis
+      - db
+
+  redis:
+    image: "redis:alpine"
+
+volumes:
+  db_data:
