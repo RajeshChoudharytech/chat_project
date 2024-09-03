@@ -11,7 +11,7 @@ class Conversation(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def __str__(self):
+    def participant(self):
         return ', '.join([user.username for user in self.participants.all()])
 
 

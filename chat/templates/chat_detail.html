@@ -12,7 +12,7 @@
     <ul class="list-group mb-4">
         {% for message in messages %}
         <li class="list-group-item">
-            <strong>{{ message.sender.username }}:</strong> {{ message.text }}
+            <strong>{{ message.sender.username }}:</strong> {{ message.content }}
             <small class="text-muted float-end">{{ message.timestamp }}</small>
         </li>
         {% endfor %}

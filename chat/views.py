@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, DetailView, ListView
-from django.shortcuts import redirect
+from django.shortcuts import redirect,render
 from django.urls import reverse_lazy
 from .models import Conversation, Message, UnreadMessage
 
@@ -27,7 +27,7 @@ class ChatDetailView(LoginRequiredMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         conversation = self.get_object()
-        content = request.POST.get('content')
+        content = request.POST.get('message')
         if content:
             message = Message.objects.create(
                 conversation=conversation,

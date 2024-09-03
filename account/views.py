@@ -4,7 +4,8 @@ from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from .forms import UserRegistrationForm, UserProfileForm, UserLoginForm
 from .models import UserProfile
-
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
 
 class UserRegisterView(CreateView):
     model = User
@@ -20,27 +21,24 @@ class UserRegisterView(CreateView):
             profile.user = self.object
             profile.save()
         return response
-
     
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('login')
 
-
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
-def login(request):
+def user_login(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
-            breakpoint()
             if user is not None:
-                login(request, user)
+                login(request, user)  # Pass both request and user
                 return redirect('chat_list')
             else:
                 return render(request, 'login.html', {'form': form, 'error': 'Invalid login credentials'})
+        else:
+            return render(request, 'login.html', {'form': form, 'error': 'Form is invalid'})
     else:
         form = UserLoginForm()
     return render(request, 'login.html', {'form': form})
